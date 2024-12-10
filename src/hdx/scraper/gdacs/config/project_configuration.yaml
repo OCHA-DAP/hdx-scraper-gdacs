@@ -1,3 +1,38 @@
 # Collector specific configuration
 
 base_url: "https://www.gdacs.org/XML/RSS.xml"
+
+dataset_name: "gdacs-rss-information"
+
+dataset_title: "GDACS RSS information"
+
+disaster_conversion:
+  "DR": "Drought"
+  "EQ": "Earthquake"
+  "FL": "Flood"
+  "TC": "Tropical Cyclone"
+  "VO": "Volcano"
+  "WF": "Wildfire"
+
+tags:
+  - "cyclones-hurricanes-typhoons"
+  - "earthquake-tsunami"
+  - "flooding"
+  - "natural disasters"
+
+hxl_tags:
+  "id": "#event+id"
+  "iso3": "#country+code"
+  "country": "#country+name"
+  "title": "#meta+title"
+  "summary": "#meta+summary"
+  "event_type": "#event+type"
+  "severity_unit": "#event+severity+unit"
+  "severity_value": "#event+severity+value"
+  "source": "#meta+source"
+  "from_date": "#date+start"
+  "to_date": "#date+end"
+  "link": "#meta+link"
+  "geo_lat": "#geo+lat"
+  "geo_long": "#geo+lon"
+  "gdacs_bbox": "#geo+bbox"

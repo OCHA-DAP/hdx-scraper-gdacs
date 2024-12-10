@@ -1,10 +1,12 @@
 license_id: cc-by
 methodology: Other
-caveats: None
-dataset_source: Proper name of source organization
+methodology_other: https://gdacs.org/Knowledge/overview.aspx
+caveats: While we try everything to ensure accuracy, this information is purely indicative and should not be used for any decision making without alternate sources of information. The JRC is not responsible for any damage or loss resulting from use of the information presented on this website.
+dataset_source: European Union
 package_creator: HDX Data Systems Team
 private: False
-maintainer: dataset maintainer HDX ID
-owner_org:  dataset organization HDX ID
-data_update_frequency: update frequency
-notes: dataset notes
+maintainer: aa13de36-28c5-47a7-8d0b-6d7c754ba8c8
+owner_org:  f27b8618-52b9-4827-9440-eb65a1f66d41
+data_update_frequency: 1
+notes: Disaster alerts in the past 4 days. European Union, 2024
+subnational: "1"
