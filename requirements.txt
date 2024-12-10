@@ -32,6 +32,8 @@ email-validator==2.2.0
     # via hdx-python-api
 et-xmlfile==2.0.0
     # via openpyxl
+feedparser==6.0.11
+    # via hdx-scraper-gdacs (pyproject.toml)
 frictionless==5.18.0
     # via hdx-python-utilities
 hdx-python-api==6.3.5
@@ -151,6 +153,8 @@ ruamel-yaml-clib==0.2.12
     # via ruamel-yaml
 setuptools==75.6.0
     # via ckanapi
+sgmllib3k==1.0.0
+    # via feedparser
 shellingham==1.5.4
     # via typer
 simpleeval==1.0.3

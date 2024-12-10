@@ -58,6 +58,10 @@ et-xmlfile==2.0.0
     # via
     #   -c requirements.txt
     #   openpyxl
+feedparser==6.0.11
+    # via
+    #   -c requirements.txt
+    #   hdx-scraper-gdacs (pyproject.toml)
 frictionless==5.18.0
     # via
     #   -c requirements.txt
@@ -270,6 +274,10 @@ setuptools==75.6.0
     # via
     #   -c requirements.txt
     #   ckanapi
+sgmllib3k==1.0.0
+    # via
+    #   -c requirements.txt
+    #   feedparser
 shellingham==1.5.4
     # via
     #   -c requirements.txt
