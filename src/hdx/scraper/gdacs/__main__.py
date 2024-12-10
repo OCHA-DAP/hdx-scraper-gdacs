@@ -16,11 +16,13 @@ from hdx.utilities.path import (
 )
 from hdx.utilities.retriever import Retrieve
 
+from src.hdx.scraper.gdacs.gdacs import GDACS
+
 logger = logging.getLogger(__name__)
 
 _USER_AGENT_LOOKUP = "hdx-scraper-gdacs"
 _SAVED_DATA_DIR = "saved_data"  # Keep in repo to avoid deletion in /tmp
-_UPDATED_BY_SCRIPT = "HDX Scraper: gdacs"
+_UPDATED_BY_SCRIPT = "HDX Scraper: GDACS"
 
 
 def main(
@@ -48,9 +50,10 @@ def main(
                 use_saved=use_saved,
             )
             configuration = Configuration.read()
-            #
-            # Steps to generate dataset
-            #
+            gdacs = GDACS(configuration, retriever)
+            gdacs.get_data()
+
+            dataset = gdacs.generate_dataset()
             dataset.update_from_yaml(
                 path=join(
                     dirname(__file__), "config", "hdx_dataset_static.yaml"
@@ -72,5 +75,6 @@ if __name__ == "__main__":
         user_agent_config_yaml=join(expanduser("~"), ".useragents.yaml"),
         user_agent_lookup=_USER_AGENT_LOOKUP,
         project_config_yaml=join(
-            dirname(__file__), "config", "project_configuration.yaml"),
+            dirname(__file__), "config", "project_configuration.yaml"
+        ),
     )

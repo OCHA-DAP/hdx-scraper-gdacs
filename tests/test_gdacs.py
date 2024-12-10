@@ -7,8 +7,10 @@ from hdx.utilities.path import temp_dir
 from hdx.utilities.retriever import Retrieve
 from hdx.utilities.useragent import UserAgent
 
+from hdx.scraper.gdacs.gdacs import GDACS
 
-class Testgdacs:
+
+class TestGDACS:
     @pytest.fixture(scope="function")
     def configuration(self, config_dir):
         UserAgent.set_global("test")
@@ -31,15 +33,9 @@ class Testgdacs:
     def config_dir(self, fixtures_dir):
         return join("src", "hdx", "scraper", "gdacs", "config")
 
-    def test_gdacs(
-        self,
-        configuration,
-        fixtures_dir,
-        input_dir,
-        config_dir
-    ):
+    def test_gdacs(self, configuration, fixtures_dir, input_dir, config_dir):
         with temp_dir(
-            "Testgdacs",
+            "TestGDACS",
             delete_on_success=True,
             delete_on_failure=False,
         ) as tempdir:
@@ -52,7 +48,10 @@ class Testgdacs:
                     save=False,
                     use_saved=True,
                 )
+                gdacs = GDACS(configuration, retriever)
+                gdacs.get_data()
 
+                dataset = gdacs.generate_dataset()
                 dataset.update_from_yaml(
                     path=join(config_dir, "hdx_dataset_static.yaml")
                 )

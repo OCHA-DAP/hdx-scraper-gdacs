@@ -1,1 +1,3 @@
 # Collector specific configuration
+
+base_url: "https://www.gdacs.org/XML/RSS.xml"
