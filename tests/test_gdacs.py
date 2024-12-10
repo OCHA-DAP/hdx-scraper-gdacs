@@ -1,3 +1,4 @@
+import filecmp
 from os.path import join
 
 import pytest
@@ -50,8 +51,64 @@ class TestGDACS:
                 )
                 gdacs = GDACS(configuration, retriever)
                 gdacs.get_data()
+                assert len(gdacs.data) == 2
 
                 dataset = gdacs.generate_dataset()
-                dataset.update_from_yaml(
-                    path=join(config_dir, "hdx_dataset_static.yaml")
+                dataset.update_from_yaml(path=join(config_dir, "hdx_dataset_static.yaml"))
+                assert dataset == {
+                    "name": "gdacs-rss-information",
+                    "title": "GDACS RSS information",
+                    "dataset_date": "[2024-12-09T00:00:00 TO 2024-12-10T23:59:59]",
+                    "tags": [
+                        {
+                            "name": "cyclones-hurricanes-typhoons",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                        {
+                            "name": "earthquake-tsunami",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                        {
+                            "name": "flooding",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                        {
+                            "name": "natural disasters",
+                            "vocabulary_id": "b891512e-9516-4bf5-962a-7a289772a2a1",
+                        },
+                    ],
+                    "groups": [{"name": "usa"}],
+                    "license_id": "cc-by",
+                    "methodology": "Other",
+                    "methodology_other": "https://gdacs.org/Knowledge/overview.aspx",
+                    "caveats": "While we try everything to ensure accuracy, this "
+                    "information is purely indicative and should not be used for any "
+                    "decision making without alternate sources of information. The JRC "
+                    "is not responsible for any damage or loss resulting from use of the "
+                    "information presented on this website.",
+                    "dataset_source": "European Union",
+                    "package_creator": "HDX Data Systems Team",
+                    "private": False,
+                    "maintainer": "aa13de36-28c5-47a7-8d0b-6d7c754ba8c8",
+                    "owner_org": "f27b8618-52b9-4827-9440-eb65a1f66d41",
+                    "data_update_frequency": 1,
+                    "notes": "Disaster alerts in the past 4 days. European "
+                    "Union, 2024",
+                    "subnational": "1",
+                }
+
+                resources = dataset.get_resources()
+                assert resources == [
+                    {
+                        "name": "gdacs_rss_information.csv",
+                        "description": " ",
+                        "format": "csv",
+                        "resource_type": "file.upload",
+                        "url_type": "upload",
+                    }
+                ]
+
+                assert filecmp.cmp(
+                    join(fixtures_dir, "gdacs_rss_information.csv"),
+                    join(tempdir, "gdacs_rss_information.csv"),
                 )

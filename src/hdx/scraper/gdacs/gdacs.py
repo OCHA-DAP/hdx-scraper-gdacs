@@ -33,7 +33,7 @@ class GDACS:
             self.dates.append(parse_date(from_date))
             self.dates.append(parse_date(to_date))
             event_type = entry.gdacs_eventtype
-            event_type = self._configuration["disaster_conversions"].get(
+            event_type = self._configuration["disaster_conversion"].get(
                 event_type, event_type
             )
             self.data.append(

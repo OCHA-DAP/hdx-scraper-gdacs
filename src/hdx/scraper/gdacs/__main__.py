@@ -55,9 +55,7 @@ def main(
 
             dataset = gdacs.generate_dataset()
             dataset.update_from_yaml(
-                path=join(
-                    dirname(__file__), "config", "hdx_dataset_static.yaml"
-                )
+                path=join(dirname(__file__), "config", "hdx_dataset_static.yaml")
             )
             dataset.create_in_hdx(
                 remove_additional_resources=True,
