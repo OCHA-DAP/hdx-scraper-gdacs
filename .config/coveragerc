@@ -1,0 +1,12 @@
+[report]
+omit =
+    */run.py
+    */python?.?/*
+    */venv/*
+    */site-packages/*
+    */tests/*
+    *__init__*
+    */_version.py
+
+exclude_lines =
+    if __name__ == '__main__':

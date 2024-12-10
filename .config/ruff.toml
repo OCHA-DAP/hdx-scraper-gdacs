@@ -1,0 +1,14 @@
+line-length = 79
+exclude = ["_version.py"]
+
+[lint]
+# List of rules: https://docs.astral.sh/ruff/rules/
+select = [
+  "E",   # pycodestyle - default
+  "F",   # pyflakes - default
+  "I"    # isort
+]
+
+[lint.isort]
+known-local-folder = ["hdx.scraper.gdacs"]
+known-third-party = ["hdx.api", "hdx.location", "hdx.data", "hdx.database", "hdx.facades", "hdx.scraper", "hdx.utilities"]
