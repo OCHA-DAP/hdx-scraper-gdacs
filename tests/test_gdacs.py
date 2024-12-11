@@ -1,4 +1,5 @@
 import filecmp
+from datetime import datetime, timezone
 from os.path import join
 
 import pytest
@@ -50,7 +51,13 @@ class TestGDACS:
                     use_saved=True,
                 )
                 gdacs = GDACS(configuration, retriever)
-                gdacs.get_data()
+                last_build_date, update = gdacs.parse_feed(
+                    datetime(2024, 12, 1, 0, 0, tzinfo=timezone.utc)
+                )
+                assert last_build_date == datetime(
+                    2024, 12, 10, 21, 15, 3, tzinfo=timezone.utc
+                )
+                assert update is True
                 assert len(gdacs.data) == 2
 
                 dataset = gdacs.generate_dataset()

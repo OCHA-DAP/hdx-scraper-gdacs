@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-gdacs/badge.svg?branch=main&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-gdacs?branch=main)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-This script ...
+This script connects to the GDACS API and extracts disaster data creating a row in a dataset for each item in the feed in HDX. It makes 1 read to GDACS's feed and 1 read/writes (API calls) to HDX in a half hour period. It is run every two hours but only writes to HDX if it finds new data.
 
 ## Development
 

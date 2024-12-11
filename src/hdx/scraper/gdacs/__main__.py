@@ -10,11 +10,13 @@ from os.path import dirname, expanduser, join
 
 from hdx.api.configuration import Configuration
 from hdx.facades.infer_arguments import facade
+from hdx.utilities.dateparse import iso_string_from_datetime, parse_date
 from hdx.utilities.downloader import Download
 from hdx.utilities.path import (
     wheretostart_tempdir_batch,
 )
 from hdx.utilities.retriever import Retrieve
+from hdx.utilities.state import State
 
 from src.hdx.scraper.gdacs.gdacs import GDACS
 
@@ -38,32 +40,37 @@ def main(
     Returns:
         None
     """
-    with wheretostart_tempdir_batch(folder=_USER_AGENT_LOOKUP) as info:
-        temp_dir = info["folder"]
-        with Download() as downloader:
-            retriever = Retrieve(
-                downloader=downloader,
-                fallback_dir=temp_dir,
-                saved_dir=_SAVED_DATA_DIR,
-                temp_dir=temp_dir,
-                save=save,
-                use_saved=use_saved,
-            )
-            configuration = Configuration.read()
-            gdacs = GDACS(configuration, retriever)
-            gdacs.get_data()
+    configuration = Configuration.read()
+    with State("last_build_date.txt", parse_date, iso_string_from_datetime) as state:
+        with wheretostart_tempdir_batch(folder=_USER_AGENT_LOOKUP) as info:
+            temp_dir = info["folder"]
+            with Download() as downloader:
+                retriever = Retrieve(
+                    downloader=downloader,
+                    fallback_dir=temp_dir,
+                    saved_dir=_SAVED_DATA_DIR,
+                    temp_dir=temp_dir,
+                    save=save,
+                    use_saved=use_saved,
+                )
 
-            dataset = gdacs.generate_dataset()
-            dataset.update_from_yaml(
-                path=join(dirname(__file__), "config", "hdx_dataset_static.yaml")
-            )
-            dataset.create_in_hdx(
-                remove_additional_resources=True,
-                match_resource_order=False,
-                hxl_update=False,
-                updated_by_script=_UPDATED_BY_SCRIPT,
-                batch=info["batch"],
-            )
+                gdacs = GDACS(configuration, retriever)
+                last_build_date, update = gdacs.parse_feed(state.get())
+
+                if update:
+                    dataset = gdacs.generate_dataset()
+                    dataset.update_from_yaml(
+                        path=join(dirname(__file__), "config", "hdx_dataset_static.yaml")
+                    )
+                    dataset.create_in_hdx(
+                        remove_additional_resources=True,
+                        match_resource_order=False,
+                        hxl_update=False,
+                        updated_by_script=_UPDATED_BY_SCRIPT,
+                        batch=info["batch"],
+                    )
+
+                    state.set(last_build_date)
 
 
 if __name__ == "__main__":

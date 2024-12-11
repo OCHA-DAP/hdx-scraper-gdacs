@@ -2,6 +2,7 @@
 """gdacs scraper"""
 
 import logging
+from datetime import datetime
 from typing import Optional
 
 from feedparser import parse
@@ -15,16 +16,19 @@ logger = logging.getLogger(__name__)
 
 class GDACS:
     def __init__(self, configuration: Configuration, retriever: Retrieve):
-        self._configuration = configuration
-        self._retriever = retriever
+        self.configuration = configuration
+        self.retriever = retriever
         self.data = []
         self.dates = []
         self.countries = set()
 
-    def get_data(self) -> None:
-        text = self._retriever.download_text(self._configuration["base_url"])
-        entries = parse(text).entries
-        for entry in entries:
+    def parse_feed(self, previous_build_date) -> (datetime, bool):
+        rssfile = self.retriever.download_file(self.configuration["base_url"])
+        feed = parse(rssfile)
+        last_build_date = parse_date(feed.feed.updated)
+        if last_build_date <= previous_build_date:
+            return previous_build_date, False
+        for entry in feed.entries:
             iso3 = entry.gdacs_iso3
             if iso3 and iso3 != "":
                 self.countries.add(iso3)
@@ -33,7 +37,7 @@ class GDACS:
             self.dates.append(parse_date(from_date))
             self.dates.append(parse_date(to_date))
             event_type = entry.gdacs_eventtype
-            event_type = self._configuration["disaster_conversion"].get(
+            event_type = self.configuration["disaster_conversion"].get(
                 event_type, event_type
             )
             self.data.append(
@@ -55,14 +59,14 @@ class GDACS:
                     "gdacs_bbox": entry.gdacs_bbox,
                 }
             )
-        return
+        return last_build_date, True
 
     def generate_dataset(self) -> Optional[Dataset]:
-        dataset_name = self._configuration["dataset_name"]
-        dataset_title = self._configuration["dataset_title"]
+        dataset_name = self.configuration["dataset_name"]
+        dataset_title = self.configuration["dataset_title"]
         dataset_time_start = min(self.dates)
         dataset_time_end = max(self.dates)
-        dataset_tags = self._configuration["tags"]
+        dataset_tags = self.configuration["tags"]
         dataset_country_iso3s = self.countries
 
         dataset = Dataset(
@@ -79,8 +83,8 @@ class GDACS:
         dataset.generate_resource_from_iterable(
             headers=list(self.data[0].keys()),
             iterable=self.data,
-            hxltags=self._configuration["hxl_tags"],
-            folder=self._retriever.temp_dir,
+            hxltags=self.configuration["hxl_tags"],
+            folder=self.retriever.temp_dir,
             filename="gdacs_rss_information.csv",
             resourcedata={
                 "name": "gdacs_rss_information.csv",
