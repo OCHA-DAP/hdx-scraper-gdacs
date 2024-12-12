@@ -77,7 +77,6 @@ def main(
 if __name__ == "__main__":
     facade(
         main,
-        hdx_site="dev",
         user_agent_config_yaml=join(expanduser("~"), ".useragents.yaml"),
         user_agent_lookup=_USER_AGENT_LOOKUP,
         project_config_yaml=join(
