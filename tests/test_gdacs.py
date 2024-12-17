@@ -64,7 +64,7 @@ class TestGDACS:
                 dataset.update_from_yaml(path=join(config_dir, "hdx_dataset_static.yaml"))
                 assert dataset == {
                     "name": "gdacs-rss-information",
-                    "title": "GDACS RSS information",
+                    "title": "GDACS RSS Information",
                     "dataset_date": "[2024-12-09T00:00:00 TO 2024-12-10T23:59:59]",
                     "tags": [
                         {
@@ -99,8 +99,13 @@ class TestGDACS:
                     "maintainer": "aa13de36-28c5-47a7-8d0b-6d7c754ba8c8",
                     "owner_org": "f27b8618-52b9-4827-9440-eb65a1f66d41",
                     "data_update_frequency": 1,
-                    "notes": "Disaster alerts in the past 4 days. European "
-                    "Union, 2024",
+                    "notes": "GDACS alerts are issued for earthquakes and possible "
+                    "subsequent tsunamis, tropical cyclones, floods and volcanoes. "
+                    "Earthquake, tsunami and tropical cyclones calculations and "
+                    "assessments are done automatically, without human intervention. "
+                    "Floods and volcanic eruptions are currently manually introduced. "
+                    "Research and development is continuous to improve the global "
+                    "monitoring.",
                     "subnational": "1",
                 }
 

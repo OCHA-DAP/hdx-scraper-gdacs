@@ -4,7 +4,7 @@ base_url: "https://www.gdacs.org/XML/RSS.xml"
 
 dataset_name: "gdacs-rss-information"
 
-dataset_title: "GDACS RSS information"
+dataset_title: "GDACS RSS Information"
 
 disaster_conversion:
   "DR": "Drought"
