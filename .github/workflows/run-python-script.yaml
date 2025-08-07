@@ -26,7 +26,7 @@ jobs:
       env:
         HDX_SITE: ${{ vars.HDX_SITE }}
         HDX_KEY: ${{ secrets.HDX_BOT_SCRAPERS_API_TOKEN }}
-        PREPREFIX: ${{ secrets.HDX_PIPELINE_PREPREFIX }}
+        PREPREFIX: ${{ vars.HDX_USER_AGENT_PREPREFIX }}
         USER_AGENT: ${{ vars.USER_AGENT }}
         EXTRA_PARAMS: ${{ vars.EXTRA_PARAMS }}
       run: |
@@ -51,3 +51,12 @@ jobs:
         body: GitHub Actions run job for ${{github.repository}} failed!
         to: ${{vars.HDX_PIPELINE_EMAIL_LIST}}
         from: ${{secrets.HDX_PIPELINE_EMAIL_FROM}}
+        content_type: text/html
+
+  workflow-keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1
