@@ -46,7 +46,7 @@ def main(
     """
     logger.info(f"##### {_LOOKUP} version {__version__} ####")
     configuration = Configuration.read()
-    User.check_current_user_write_access("")
+    User.check_current_user_write_access("gdacs")
     previous_build_date = parse_date(load_text("last_build_date.txt"))
 
     with temp_dir_batch(folder=_LOOKUP) as info:
