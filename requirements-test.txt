@@ -270,7 +270,7 @@ ruamel-yaml-clib==0.2.12
     # via
     #   -c requirements.txt
     #   ruamel-yaml
-setuptools==75.6.0
+setuptools==78.1.1
     # via
     #   -c requirements.txt
     #   ckanapi
