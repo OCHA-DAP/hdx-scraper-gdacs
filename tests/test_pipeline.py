@@ -1,41 +1,16 @@
-import filecmp
 from datetime import datetime, timezone
 from os.path import join
 
-import pytest
-from hdx.api.configuration import Configuration
+from hdx.utilities.compare import assert_files_same
 from hdx.utilities.downloader import Download
 from hdx.utilities.path import temp_dir
 from hdx.utilities.retriever import Retrieve
-from hdx.utilities.useragent import UserAgent
 
-from hdx.scraper.gdacs.gdacs import GDACS
+from hdx.scraper.gdacs.pipeline import Pipeline
 
 
-class TestGDACS:
-    @pytest.fixture(scope="function")
-    def configuration(self, config_dir):
-        UserAgent.set_global("test")
-        Configuration._create(
-            hdx_read_only=True,
-            hdx_site="prod",
-            project_config_yaml=join(config_dir, "project_configuration.yaml"),
-        )
-        return Configuration.read()
-
-    @pytest.fixture(scope="class")
-    def fixtures_dir(self):
-        return join("tests", "fixtures")
-
-    @pytest.fixture(scope="class")
-    def input_dir(self, fixtures_dir):
-        return join(fixtures_dir, "input")
-
-    @pytest.fixture(scope="class")
-    def config_dir(self, fixtures_dir):
-        return join("src", "hdx", "scraper", "gdacs", "config")
-
-    def test_gdacs(self, configuration, fixtures_dir, input_dir, config_dir):
+class TestPipeline:
+    def test_pipeline(self, configuration, fixtures_dir, input_dir, config_dir):
         with temp_dir(
             "TestGDACS",
             delete_on_success=True,
@@ -50,18 +25,20 @@ class TestGDACS:
                     save=False,
                     use_saved=True,
                 )
-                gdacs = GDACS(configuration, retriever)
-                last_build_date, update = gdacs.parse_feed(
+                pipeline = Pipeline(configuration, retriever)
+                last_build_date, update = pipeline.parse_feed(
                     datetime(2024, 12, 1, 0, 0, tzinfo=timezone.utc)
                 )
                 assert last_build_date == datetime(
                     2024, 12, 10, 21, 15, 3, tzinfo=timezone.utc
                 )
                 assert update is True
-                assert len(gdacs.data) == 2
+                assert len(pipeline.data) == 2
 
-                dataset = gdacs.generate_dataset()
-                dataset.update_from_yaml(path=join(config_dir, "hdx_dataset_static.yaml"))
+                dataset = pipeline.generate_dataset()
+                dataset.update_from_yaml(
+                    path=join(config_dir, "hdx_dataset_static.yaml")
+                )
                 assert dataset == {
                     "name": "gdacs-rss-information",
                     "title": "GDACS RSS Information",
@@ -120,7 +97,7 @@ class TestGDACS:
                     }
                 ]
 
-                assert filecmp.cmp(
+                assert_files_same(
                     join(fixtures_dir, "gdacs_rss_information.csv"),
                     join(tempdir, "gdacs_rss_information.csv"),
                 )

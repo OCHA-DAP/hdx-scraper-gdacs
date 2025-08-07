@@ -17,18 +17,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      checks: write
+      pull-requests: write
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
     - name: Install Hatch
       uses: pypa/hatch@install
     - name: Test with hatch/pytest
-      env:
-        HDX_KEY_TEST: ${{ secrets.HDX_BOT_SCRAPERS_API_TOKEN }}
-        GSHEET_AUTH: ${{ secrets.GSHEET_AUTH }}
       run: |
         hatch test
     - name: Check styling

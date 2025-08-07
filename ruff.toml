@@ -1,4 +1,3 @@
-line-length = 90
 exclude = ["_version.py"]
 
 [lint]
@@ -7,6 +6,9 @@ select = [
   "E",   # pycodestyle - default
   "F",   # pyflakes - default
   "I"    # isort
+]
+ignore = [
+    "E501" # Line too long
 ]
 
 [lint.isort]

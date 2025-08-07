@@ -14,7 +14,7 @@ from hdx.utilities.retriever import Retrieve
 logger = logging.getLogger(__name__)
 
 
-class GDACS:
+class Pipeline:
     def __init__(self, configuration: Configuration, retriever: Retrieve):
         self.configuration = configuration
         self.retriever = retriever
