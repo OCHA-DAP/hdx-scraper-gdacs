@@ -346,7 +346,7 @@ unidecode==1.3.8
     #   -c requirements.txt
     #   libhxl
     #   pyphonetics
-urllib3==2.2.3
+urllib3==2.5.0
     # via
     #   -c requirements.txt
     #   libhxl
