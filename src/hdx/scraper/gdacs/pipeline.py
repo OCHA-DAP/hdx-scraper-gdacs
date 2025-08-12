@@ -8,6 +8,7 @@ from typing import Optional
 from feedparser import parse
 from hdx.api.configuration import Configuration
 from hdx.data.dataset import Dataset
+from hdx.data.hdxobject import HDXError
 from hdx.utilities.dateparse import parse_date
 from hdx.utilities.retriever import Retrieve
 
@@ -78,7 +79,11 @@ class Pipeline:
 
         dataset.set_time_period(dataset_time_start, dataset_time_end)
         dataset.add_tags(dataset_tags)
-        dataset.add_country_locations(dataset_country_iso3s)
+        for country in dataset_country_iso3s:
+            try:
+                dataset.add_country_location(country)
+            except HDXError:
+                logger.error(f"Could not add country location for {country}")
 
         dataset.generate_resource_from_iterable(
             headers=list(self.data[0].keys()),
