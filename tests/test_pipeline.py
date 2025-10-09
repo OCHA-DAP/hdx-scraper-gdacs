@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from os.path import join
 
 from hdx.utilities.compare import assert_files_same
@@ -26,13 +25,7 @@ class TestPipeline:
                     use_saved=True,
                 )
                 pipeline = Pipeline(configuration, retriever)
-                last_build_date, update = pipeline.parse_feed(
-                    datetime(2024, 12, 1, 0, 0, tzinfo=timezone.utc)
-                )
-                assert last_build_date == datetime(
-                    2024, 12, 10, 21, 15, 3, tzinfo=timezone.utc
-                )
-                assert update is True
+                pipeline.parse_feed()
                 assert len(pipeline.data) == 2
 
                 dataset = pipeline.generate_dataset()
@@ -92,8 +85,6 @@ class TestPipeline:
                         "name": "gdacs_rss_information.csv",
                         "description": " ",
                         "format": "csv",
-                        "resource_type": "file.upload",
-                        "url_type": "upload",
                     }
                 ]
 
