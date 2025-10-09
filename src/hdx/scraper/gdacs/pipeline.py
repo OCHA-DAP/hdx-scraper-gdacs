@@ -2,7 +2,6 @@
 """gdacs scraper"""
 
 import logging
-from datetime import datetime
 from typing import Optional
 
 from feedparser import parse
@@ -23,12 +22,9 @@ class Pipeline:
         self.dates = []
         self.countries = set()
 
-    def parse_feed(self, previous_build_date) -> (datetime, bool):
+    def parse_feed(self) -> None:
         rssfile = self.retriever.download_file(self.configuration["base_url"])
         feed = parse(rssfile)
-        last_build_date = parse_date(feed.feed.updated)
-        if last_build_date <= previous_build_date:
-            return previous_build_date, False
         for entry in feed.entries:
             iso3 = entry.gdacs_iso3
             if iso3 and iso3 != "":
@@ -60,7 +56,7 @@ class Pipeline:
                     "gdacs_bbox": entry.gdacs_bbox,
                 }
             )
-        return last_build_date, True
+        return
 
     def generate_dataset(self) -> Optional[Dataset]:
         dataset_name = self.configuration["dataset_name"]

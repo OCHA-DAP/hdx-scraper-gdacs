@@ -31,14 +31,6 @@ jobs:
         EXTRA_PARAMS: ${{ vars.EXTRA_PARAMS }}
       run: |
         python -m hdx.scraper.gdacs
-    - name: Commit updated data bundle
-      if: success()
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        file_pattern: "last_build_date.txt"
-        commit_message: automatic - Data bundle updated
-        push_options: "--force"
-        skip_dirty_check: false
     - name: Send mail
       if: failure()
       uses: dawidd6/action-send-mail@v3
