@@ -81,16 +81,15 @@ class Pipeline:
             except HDXError:
                 logger.error(f"Could not add country location for {country}")
 
-        dataset.generate_resource_from_iterable(
-            headers=list(self.data[0].keys()),
-            iterable=self.data,
-            hxltags=self.configuration["hxl_tags"],
+        dataset.generate_resource(
             folder=self.retriever.temp_dir,
             filename="gdacs_rss_information.csv",
+            rows=self.data,
             resourcedata={
                 "name": "gdacs_rss_information.csv",
                 "description": " ",
             },
+            headers=list(self.data[0].keys()),
             encoding="utf-8-sig",
         )
 
